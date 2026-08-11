@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المنتج | Baggy Girls</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        gold: {
+                            500: '#D4AF37',
+                            600: '#C5A017'
+                        },
+                        dark: {
+                            900: '#111111',
+                            800: '#1A1A1A',
+                            700: '#2A2A2A'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-dark-900 dark:text-gray-100 transition-colors duration-300 font-sans min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="w-full bg-white dark:bg-dark-800 shadow-sm py-4 px-6 md:px-12 flex justify-between items-center z-50 transition-colors duration-300 border-b border-gray-100 dark:border-gray-800">
+        <a href="index.html" class="text-2xl font-display font-bold tracking-widest text-gold-500">BAGGY</a>
+        
+        <div class="flex items-center gap-6">
+            <button id="theme-toggle" class="text-gray-700 dark:text-gray-300 hover:text-gold-500 transition-colors text-xl">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block"></i>
+            </button>
+            <a href="index.html" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 transition-colors font-medium">العودة للمتجر <i class="fa-solid fa-arrow-left mr-2"></i></a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-10 md:py-20 max-w-6xl">
+        <div id="loading-state" class="flex flex-col items-center justify-center py-32">
+            <i class="fa-solid fa-circle-notch fa-spin text-5xl text-gold-500 mb-4"></i>
+            <p class="text-xl text-gray-500">جاري تحميل تفاصيل المنتج...</p>
+        </div>
+        
+        <div id="error-state" class="hidden flex-col items-center justify-center py-32">
+            <i class="fa-solid fa-triangle-exclamation text-5xl text-red-500 mb-4"></i>
+            <p class="text-xl text-gray-500 mb-6">عذراً، لم يتم العثور على المنتج.</p>
+            <a href="index.html" class="bg-gold-500 text-white px-8 py-3 rounded-full font-bold hover:bg-gold-600 transition-colors">العودة للمتجر</a>
+        </div>
+
+        <div id="product-container" class="hidden grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-start">
+            
+            <!-- Images Section -->
+            <div class="flex flex-col gap-4">
+                <div class="rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm aspect-[4/5] bg-white dark:bg-dark-800">
+                    <img id="main-image" src="" alt="Product Image" class="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110">
+                </div>
+                
+                <div id="thumbnails-container" class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                    <!-- Thumbnails injected via JS -->
+                </div>
+            </div>
+            
+            <!-- Details Section -->
+            <div class="flex flex-col sticky top-24">
+                <span class="text-gold-500 font-bold tracking-wider text-sm mb-2 uppercase">Baggy Girls Collection</span>
+                <h1 id="product-title" class="text-3xl md:text-5xl font-display font-bold mb-4 text-gray-900 dark:text-white"></h1>
+                <p id="product-price" class="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-8 border-b border-gray-200 dark:border-gray-700 pb-6"></p>
+                
+                <div class="mb-8">
+                    <h3 class="font-bold mb-3 text-lg">تفاصيل المنتج:</h3>
+                    <p id="product-description" class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        جاري تحميل التفاصيل...
+                    </p>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 mt-auto pt-4">
+                    <button id="add-to-cart-btn" class="flex-1 bg-dark-900 dark:bg-white text-white dark:text-dark-900 py-4 px-8 rounded-full font-bold text-lg hover:bg-gold-500 dark:hover:bg-gold-500 hover:text-white dark:hover:text-white transition-colors shadow-lg flex justify-center items-center gap-3">
+                        <i class="fa-solid fa-cart-plus"></i>
+                        أضف للسلة
+                    </button>
+                    <button id="direct-whatsapp-btn" class="flex-1 bg-[#25D366] text-white py-4 px-8 rounded-full font-bold text-lg hover:bg-[#128C7E] transition-colors shadow-lg flex justify-center items-center gap-3">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                        اطلب فوراً
+                    </button>
+                </div>
+                
+                <div class="mt-8 flex items-center justify-center gap-6 text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-6">
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-truck-fast"></i> شحن سريع</div>
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-shield-check"></i> جودة مضمونة</div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-dark-800 pt-16 pb-8 border-t border-gray-200 dark:border-gray-800 text-center transition-colors duration-300 mt-auto">
+        <div class="container mx-auto px-6">
+            <h3 class="text-3xl font-display font-bold text-gold-500 mb-6 tracking-widest">BAGGY</h3>
+            <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed text-lg">براند متخصص في تقديم أحدث تصاميم الشنط العصرية، المصممة خصيصاً لتلائم ذوقك الرفيع وتمنحك إطلالة فريدة تجمع بين الأناقة والعملية في كل خطوة✨️✨️.</p>
+            <div class="flex justify-center gap-6 mb-12 text-xl">
+                <a href="#" class="w-12 h-12 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-500 hover:text-white hover:bg-gold-500 hover:border-gold-500 transition-all duration-300"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="w-12 h-12 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-500 hover:text-white hover:bg-gold-500 hover:border-gold-500 transition-all duration-300"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="w-12 h-12 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-500 hover:text-white hover:bg-gold-500 hover:border-gold-500 transition-all duration-300"><i class="fa-brands fa-facebook-f"></i></a>
+            </div>
+            <div class="border-t border-gray-100 dark:border-gray-700 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+                <p>&copy; 2024 Baggy Girls. جميع الحقوق محفوظة.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-gold-500 transition-colors">الشروط والأحكام</a>
+                    <a href="#" class="hover:text-gold-500 transition-colors">سياسة الخصوصية</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="product.js"></script>
+</body>
+</html>

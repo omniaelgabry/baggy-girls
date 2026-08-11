@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة المنتجات الجديدة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen font-sans">
+    <div class="bg-white p-8 rounded-2xl shadow-xl text-center max-w-lg w-full">
+        <h1 class="text-2xl font-bold mb-4 text-gray-800">جاري إضافة المنتجات الجديدة...</h1>
+        <p id="status" class="text-blue-600 font-semibold mb-6">الرجاء الانتظار، لا تقم بإغلاق الصفحة.</p>
+        
+        <div class="w-full bg-gray-200 rounded-full h-4 mb-4">
+            <div id="progress-bar" class="bg-green-500 h-4 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <p id="progress-text" class="text-gray-500 text-sm">0 / 9 منتجات</p>
+    </div>
+
+    <script type="module">
+        import { db, collection, addDoc } from './firebase-config.js';
+
+        const newProducts = [
+            {
+                name: "The Royal Elegance",
+                price: 620,
+                description: "حقيبة فاخرة بتصميم عصري يناسب أرقى إطلالاتك.",
+                images: [
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mq6otxKPSK3oml7D6HiwdG54Tnft9EkxyNZVjQ",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mq4Vj2Bp3kibRS6ZsCgu5FvtWcXhOmHKTf2PJl",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqpdthxvKoYC4y1TKmHauNbSijPZwgFAM2c8dt",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqQteLhn5Fj9mqWKosPuiVCXhvZLpdagt2NBD0",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqpq87HRKoYC4y1TKmHauNbSijPZwgFAM2c8dt",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqkF6d3pLNCIF0SvETfb6mhiQyrRgtVBAxH5KX",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqOp2YL3QHJXiaeD0IrspACGMZu8k4qSNoFl9B"
+                ]
+            },
+            {
+                name: "Classic Chic",
+                price: 300,
+                description: "تصميم أنيق ومميز يضفي لمسة من الرقي على يومك. (يرجى تعديل السعر من لوحة التحكم)",
+                images: [
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mq4DCihI3kibRS6ZsCgu5FvtWcXhOmHKTf2PJl",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqTPeD0iZ8i4kzxrVlS6ZpYnodAJv2gNeuwhcy",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqmrOCW0ADyC31hzSFgvj6M5ptrRnlNuHeXJiE",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqVWl3mrzTIh2l0srQixq6BbgvNGd9kWOHSoYw",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqb9vZJAimoPfCY9KagJrVnOFAtp57DGERiLhH",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mq93BBEcGXFYNPRzr4S6yJE8ua0doDZBnGAhce",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqkh6Gr6LNCIF0SvETfb6mhiQyrRgtVBAxH5KX",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqSe77201HckNqIpyho1zrg9vnKFGHuT2MRbU0",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqZfpv7gOPMsdOo1cyemFv8K3zbpqNXWJaQ79k",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqXHMYhlh6BfOxkT4nAu10WaPpDUZLYR8H357z"
+                ]
+            },
+            
+                
+            {
+                name: "Modern Minimalist",
+                price: 350,
+                description: "لمسة عصرية بتفاصيل هادئة لتكمل أناقتك.",
+                images: [
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqdYGEYUJrDHGzf7vBosYX8MW9cpNgk3OuRnFA",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mq4wXyxU3kibRS6ZsCgu5FvtWcXhOmHKTf2PJl"
+                ]
+            },
+            {
+                name: "Evening Pearl",
+                price: 270,
+                description: "مثالية للسهرات والمناسبات الخاصة لإطلالة تخطف الأنظار.",
+                images: [
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqQDXqzm5Fj9mqWKosPuiVCXhvZLpdagt2NBD0"
+                ]
+            },
+            {
+                name: "Urban Style",
+                price: 185,
+                description: "شنطة عملية وأنيقة تناسب حركتك السريعة في المدينة.",
+                images: [
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqGeJmztF7xFCNHRI5vudXn82csPlVLakjZtQr",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqO1Phf4QHJXiaeD0IrspACGMZu8k4qSNoFl9B",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqGByiTEF7xFCNHRI5vudXn82csPlVLakjZtQr",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqVPlc0uzTIh2l0srQixq6BbgvNGd9kWOHSoYw"
+                ]
+            },
+            {
+                name: "Golden Aura",
+                price: 270,
+                description: "تفاصيل ذهبية مميزة تمنحك إطلالة فخمة في كل وقت.",
+                images: [
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqmv0BTlADyC31hzSFgvj6M5ptrRnlNuHeXJiE",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mq3wqjsIf5wbKATWFNmCY90PDjGhvXoad2QgzO"
+                ]
+            },
+            {
+                name: "Midnight Blossom",
+                price: 270,
+                description: "حقيبة راقية جداً بتصميم استثنائي للمرأة المتميزة.",
+                images: [
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqNogExbedDFtJQenCj36Xcw85KUaBsxM4ZEzP",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqkie0BjLNCIF0SvETfb6mhiQyrRgtVBAxH5KX",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqv205vVbnLfBep7YFVcuXMnA526TP1IlmZ8Jj",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqTIqWaPZ8i4kzxrVlS6ZpYnodAJv2gNeuwhcy"
+                ]
+            },
+            {
+                name: "Velvet Dream",
+                price: 270,
+                description: "تصميم حالم ومميز بلون رائع يلفت الأنظار.",
+                images: [
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqfKaQrAW5eMIFL2TXl7dCyi1nUPBtO38kv4Qu",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqHVvmi8NWxk5QMT8qmKJCiDSvrP3ghfjXsZop",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqBgDYVAcxiqhPWMEwU4d1HFa368o0s9TKIYjO",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqX9omxl6BfOxkT4nAu10WaPpDUZLYR8H357zN",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqjwGCaL4b1MnVRGbFv8PslhZJSOfDtco4k6BW",
+                    "https://ynn787qihi.ufs.sh/f/Qj6TSP5Fj9mqHi0VE5NWxk5QMT8qmKJCiDSvrP3ghfjXsZop"
+                ]
+            }
+        ];
+
+        async function seedNewProducts() {
+            const statusEl = document.getElementById('status');
+            const progressEl = document.getElementById('progress-bar');
+            const textEl = document.getElementById('progress-text');
+
+            try {
+                const total = newProducts.length;
+                let count = 0;
+
+                for (const product of newProducts) {
+                    product.createdAt = new Date().toISOString();
+                    await addDoc(collection(db, "products"), product);
+                    count++;
+                    progressEl.style.width = `${(count / total) * 100}%`;
+                    textEl.innerText = `${count} / ${total} منتجات`;
+                }
+
+                statusEl.innerText = "تمت إضافة جميع المنتجات بنجاح! 🎉";
+                statusEl.classList.replace('text-blue-600', 'text-green-600');
+                
+                setTimeout(() => {
+                    alert("اكتملت الإضافة! يمكنك الآن العودة للمتجر.");
+                }, 500);
+
+            } catch (error) {
+                console.error("Error:", error);
+                statusEl.innerText = "حدث خطأ أثناء الإضافة: " + error.message;
+                statusEl.classList.replace('text-blue-600', 'text-red-600');
+            }
+        }
+
+        // Start automatically
+        seedNewProducts();
+    </script>
+</body>
+</html>
